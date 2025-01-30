@@ -1,30 +1,24 @@
-// Get the button element
-let btn = document.getElementById('btn');
+document.addEventListener("DOMContentLoaded", () => {
+  const textInput = document.getElementById("text");
+  const delayInput = document.getElementById("delay");
+  const button = document.getElementById("btn");
+  const outputDiv = document.getElementById("output");
 
-// Add an event listener for the 'click' event
-btn.addEventListener('click', async function(event) {
-    // Prevent the form from being submitted
-    event.preventDefault();
+  async function displayMessage() {
+    const text = textInput.value.trim();
+    const delay = parseInt(delayInput.value);
 
-    // Get the user input values
-    let text = document.getElementById('text').value;
-    let delay = parseInt(document.getElementById('delay').value, 10);
-
-    // Check if the delay is a valid number
-    if (isNaN(delay) || delay < 0) {
-        document.getElementById('output').innerText = 'Please enter a valid delay in milliseconds.';
-        return;
+    if (!text || isNaN(delay) || delay < 0) {
+      alert("Please enter valid text and delay.");
+      return;
     }
 
-    // Define a function that returns a Promise that resolves after a certain amount of time
-    const delayFunction = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    outputDiv.textContent = "Waiting...";
 
-    // Display a loading message
-    document.getElementById('output').innerText = 'Loading...';
+    await new Promise((resolve) => setTimeout(resolve, delay));
 
-    // Wait for the promise to resolve
-    await delayFunction(delay);
+    outputDiv.textContent = text;
+  }
 
-    // Display the entered text (or a default message if no text was entered)
-    document.getElementById('output').innerText = text || 'No text provided.';
+  button.addEventListener("click", displayMessage);
 });
