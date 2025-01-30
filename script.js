@@ -1,24 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const textInput = document.getElementById("text");
-  const delayInput = document.getElementById("delay");
-  const button = document.getElementById("btn");
   const outputDiv = document.getElementById("output");
 
-  async function displayMessage() {
-    const text = textInput.value.trim();
-    const delay = parseInt(delayInput.value);
+  // Ensure the output div is empty at the start
+  outputDiv.innerHTML = "";
 
-    if (!text || isNaN(delay) || delay < 0) {
-      alert("Please enter valid text and delay.");
-      return;
-    }
-
-    outputDiv.textContent = "Waiting...";
-
-    await new Promise((resolve) => setTimeout(resolve, delay));
-
-    outputDiv.textContent = text;
+  function getNumbers() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([1, 2, 3, 4]);
+      }, 3000);
+    });
   }
 
-  button.addEventListener("click", displayMessage);
+  getNumbers()
+    .then((numbers) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const evens = numbers.filter(num => num % 2 === 0);
+          outputDiv.innerHTML = `Filtered Evens: ${evens.join(", ")}`;
+          resolve(evens);
+        }, 1000);
+      });
+    })
+    .then((evens) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const doubled = evens.map(num => num * 2);
+          outputDiv.innerHTML = `Doubled Evens: ${doubled.join(", ")}`;
+          resolve(doubled);
+        }, 2000);
+      });
+    });
 });
