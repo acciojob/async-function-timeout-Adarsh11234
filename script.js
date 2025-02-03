@@ -1,34 +1,22 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const outputDiv = document.getElementById("output");
+let textInput = document.getElementById('text');
+let delayInput = document.getElementById('delay');
+let outputDiv = document.getElementById('output');
+let btn = document.getElementById('btn');
 
-  // Ensure the output div is empty at the start
-  outputDiv.innerHTML = "";
+btn.addEventListener('click', async function() {
+    const text = textInput.value;
+    const delay = parseInt(delayInput.value, 10);
 
-  function getNumbers() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([1, 2, 3, 4]);
-      }, 3000);
-    });
-  }
+    if (!text || isNaN(delay) || delay < 0) {
+        outputDiv.textContent = "Please enter valid text and a positive delay value.";
+        return;
+    }
 
-  getNumbers()
-    .then((numbers) => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const evens = numbers.filter(num => num % 2 === 0);
-          outputDiv.innerHTML = `Filtered Evens: ${evens.join(", ")}`;
-          resolve(evens);
-        }, 1000);
-      });
-    })
-    .then((evens) => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const doubled = evens.map(num => num * 2);
-          outputDiv.innerHTML = `Doubled Evens: ${doubled.join(", ")}`;
-          resolve(doubled);
-        }, 2000);
-      });
-    });
+    outputDiv.textContent = "Processing...";
+    await delayFunction(delay);
+    outputDiv.textContent = text;
 });
+
+async function delayFunction(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
