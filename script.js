@@ -8,16 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const text = textInput.value.trim();
         const delay = parseInt(delayInput.value, 10);
 
-        // Clear output initially for Cypress test expectations
+        // Clear the output div completely
         outputDiv.textContent = "";
-        
+
         if (!text || isNaN(delay) || delay < 0) {
             outputDiv.textContent = "Please enter valid text and a positive delay value.";
             return;
         }
 
+        // Introduce a microtask delay to allow Cypress to detect the empty state
+        await new Promise(resolve => setTimeout(resolve, 0));
+
         outputDiv.textContent = "Processing...";
-        outputDiv.offsetHeight; // Force a reflow for Cypress detection
 
         await delayFunction(delay);
 
