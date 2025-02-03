@@ -1,35 +1,31 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const textInput = document.getElementById("text");
-    const delayInput = document.getElementById("delay");
-    const button = document.getElementById("btn");
-    const outputDiv = document.getElementById("output");
 
-    button.addEventListener("click", async () => {
-        const text = textInput.value.trim();
-        const delay = parseInt(delayInput.value, 10);
+const textInput = document.getElementById('text');
+const delayInput = document.getElementById('delay');
+const submitButton = document.getElementById('btn');
+const outputDiv = document.getElementById('output');
 
-        // Clear the output div completely
-        outputDiv.textContent = "";
-
-        if (!text || isNaN(delay) || delay < 0) {
-            outputDiv.textContent = "Please enter valid text and a positive delay value.";
-            return;
-        }
-
-        // Introduce a microtask delay to allow Cypress to detect the empty state
-        await new Promise(resolve => setTimeout(resolve, 0));
-
-        outputDiv.textContent = "Processing...";
-
-        await delayFunction(delay);
-
-        // Ensure the output div is still present before updating
-        if (document.body.contains(outputDiv)) {
-            outputDiv.textContent = text;
-        }
-    });
-});
-
-async function delayFunction(ms) {
+// Function to introduce a delay
+function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+// Async function to handle the form submission
+async function displayMessageAfterDelay() {
+    // Retrieve the user-provided text and delay values
+    const text = textInput.value;
+    const delayTime = parseInt(delayInput.value, 10);
+
+    if (isNaN(delayTime) || delayTime < 0) {
+        outputDiv.textContent = 'Please enter a valid delay.';
+        return;
+    }
+
+ 
+    await delay(delayTime);
+
+
+    outputDiv.textContent = text;
+}
+
+// Add an event listener to the submit button
+submitButton.addEventListener('click', displayMessageAfterDelay);
